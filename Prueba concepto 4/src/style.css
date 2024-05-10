@@ -1,0 +1,29 @@
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  background-color:bisque ;
+}
+
+.juego {
+  margin-top: 50px;
+  display: grid;
+  justify-content: space-between;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  width: 80%;
+}
+
+.cartas {
+  background-color: aquamarine;
+  justify-content: center;
+  height: 8rem;
+  padding: 1rem;
+  margin: 10px;
+  border-radius: 5%;
+}
+
+.carta {
+  margin: auto;
+  display: block;
+}
