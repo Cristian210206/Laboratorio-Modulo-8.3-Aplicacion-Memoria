@@ -1,63 +1,45 @@
-import { Tablero, tablero } from "./modelo"
-import { esPartidaCompleta, parejaEncontrada, parejaNoEncontrada, sonPareja, indiceActual, cartasHTML, carta1, traerValorIndiceCarta, sePuedeVoltearLaCarta, voltearLaCarta, carta2 } from "./motor"
+import { Tablero, tablero } from "./modelo";
+import { comprobarSiSonPareja, sePuedeVoltearLaCarta, voltearLaCarta } from "./motor";
 
-const fasesDelJuego = (tablero:Tablero) => {
-    switch(tablero.estadoPartida) {
-      case "CeroCartasLevantadas"
-      :
-      voltearLaCarta(tablero)
-      tablero = {
-        ...tablero,
-        indiceCartaVolteadaA: indiceActual
+const mapearDivsACartas = (indiceCarta: number, tablero:Tablero) => {
+  const dataIndiceId = `data-indice-id="${indiceCarta}"`
+  const elementoDiv = document.querySelector(`div${dataIndiceId}`)
+  const elementoImg = document.querySelector(`img${dataIndiceId}`)
+
+  if(elementoDiv && elementoDiv instanceof HTMLDivElement && elementoImg && elementoImg instanceof HTMLImageElement) {
+    elementoDiv.addEventListener("click", () => {
+      if (tablero.estadoPartida !== "PartidaNoIniciada") {
+        fasesDelJuego(elementoImg, tablero, indiceCarta)
       }
+    })
+  }
+}
+
+export const crearJuego = () => {
+  for(let indice = 0; indice < tablero.cartas.length; indice++) {
+    mapearDivsACartas(indice, tablero)
+  }
+}
+const fasesDelJuego = (carta : HTMLImageElement, tablero: Tablero, indiceCarta : number) => {
+  switch(tablero.estadoPartida) {
+    case "CeroCartasLevantadas"
+    :
+    if(sePuedeVoltearLaCarta(tablero, indiceCarta) === true) {
+      tablero.indiceCartaVolteadaA = indiceCarta
+      voltearLaCarta(tablero, carta, indiceCarta)
       tablero.estadoPartida = "UnaCartaLevantada"
-      break
-      case "UnaCartaLevantada"
-      :
-      voltearLaCarta(tablero)
-      tablero = {
-        ...tablero,
-        indiceCartaVolteadaB: indiceActual
-      }
+    }
+    break
+    case "UnaCartaLevantada"
+    :
+    if(sePuedeVoltearLaCarta(tablero,indiceCarta) === true) {
+      tablero.indiceCartaVolteadaB = indiceCarta
+      voltearLaCarta(tablero, carta, indiceCarta)
       tablero.estadoPartida = "DosCartasLevantadas"
-      break
-      case "DosCartasLevantadas"
-      :
-      if(sonPareja(tablero) === true) {
-        parejaEncontrada(tablero)
-      } else {
-        parejaNoEncontrada(tablero)
-        volverCarta()
-      }
-
-      if(esPartidaCompleta() === true) {
-        tablero.estadoPartida = "PartidaCompleta"
-      } else {
-        tablero.estadoPartida = "CeroCartasLevantadas"
-      }
     }
-  }
-
-const volverCarta = () => {
-  let cartaHTMLCambio = carta1
-  for(let i = 0; i < cartasHTML.length; i++) {
-    cartaHTMLCambio = cartasHTML[i]
-    if(cartaHTMLCambio && cartaHTMLCambio instanceof HTMLImageElement) {
-      cartaHTMLCambio.src = ""
-    }
-  }
-}
-
-export const ejecutarEnDiv1 = () => {
-  traerValorIndiceCarta(0, carta1)
-  if(sePuedeVoltearLaCarta(tablero) === true) {
-    fasesDelJuego(tablero)
-  }
-}
-
-export const ejecutarEnDiv2 = () => {
-  traerValorIndiceCarta(1, carta2)
-  if(sePuedeVoltearLaCarta(tablero) === true) {
-    fasesDelJuego(tablero)
+    break
+    case "DosCartasLevantadas"
+    :
+    comprobarSiSonPareja(tablero)
   }
 }
