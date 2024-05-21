@@ -1,6 +1,8 @@
 import {Carta, Tablero, cartas, tablero} from "./modelo"
 
 export const botonPartida = document.getElementById("botonPartida")
+export const mensajeError = document.getElementById("mensajeError")
+export const mensajeNumeroIntentos = document.getElementById("numeroIntentos")
 
 /*
 En el motor nos va a hacer falta un método para barajar cartas
@@ -23,12 +25,6 @@ const barajarCartas = (cartas : Carta[]): Carta[] => {
       return true
     } else {
       return false
-    }
-  }
-  
-  export const voltearLaCarta = (tablero: Tablero, carta: HTMLImageElement, indice: number) : void => {
-    if(carta && carta instanceof HTMLImageElement) {
-      carta.src = tablero.cartas[indice].imagen
     }
   }
   
@@ -69,7 +65,7 @@ const barajarCartas = (cartas : Carta[]): Carta[] => {
     tablero.estadoPartida = "CeroCartasLevantadas"
   }
   
-  const comprobarSiEsPartidaCompleta = (tablero: Tablero) => {
+  export const comprobarSiEsPartidaCompleta = (tablero: Tablero) => {
     if(esPartidaCompleta() === true) {
       tablero.estadoPartida = "PartidaCompleta"
     } else {
@@ -77,16 +73,6 @@ const barajarCartas = (cartas : Carta[]): Carta[] => {
     }
   }
 
-  export const comprobarSiSonPareja = (tablero:Tablero) => {
-    if(tablero.indiceCartaVolteadaA != undefined && tablero.indiceCartaVolteadaB !== undefined) {
-      if(sonPareja(tablero, tablero.indiceCartaVolteadaA, tablero.indiceCartaVolteadaB) === true) {
-        parejaEncontrada(tablero, tablero.indiceCartaVolteadaA, tablero.indiceCartaVolteadaB)
-        comprobarSiEsPartidaCompleta(tablero)
-      }
-    } else {
-      parejaNoEncontrada(tablero)
-    }
-  }
   /*
     Esto lo podemos comprobar o bien utilizando every, o bien utilizando un contador (cartasEncontradas)
   */

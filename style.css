@@ -4,7 +4,7 @@ body {
     flex-direction: column;
     place-items: center;
     justify-content: center;
-    background-color:bisque ;
+    background-color:#FAF3E0 ;
 }
 
 .juego {
@@ -16,12 +16,13 @@ body {
 }
 
 .bloqueCartas {
-    background-color: aquamarine;
+    background-color:#87CEEB;
     justify-content: center;
     height: 8rem;
     padding: 1rem;
     margin: 10px;
     border-radius: 5%;
+    transition: transform 0.3s ease-in-out;
 }
 
 .carta {
@@ -31,11 +32,28 @@ body {
 
 #botonPartida {
     display: block;
-    margin: auto;
+    font-weight: 700;
     align-items: center;
-    color: black;
-    background-color:azure;
+    background-color:#FFD700;
     height: 5rem;
     width: 10rem;
-    border-radius: 5px
+    border-radius: 5px;
+    border-color: black;
+    border-width: 5px;
+    transition: transform 0.3s ease-in-out;
 }
+
+.bloqueCartas:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+#botonPartida:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.bloqueCartas.girado .bloqueCartas {
+    transform: rotateY(180deg);
+}
+
