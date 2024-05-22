@@ -10,7 +10,7 @@ En el motor nos va a hacer falta un método para barajar cartas
 const barajarCartas = (cartas : Carta[]): Carta[] => {
     for(let i = cartas.length -1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i +1));
-        [cartas[i], cartas[j]] = [cartas[j], cartas[i]]
+        [{...cartas[i]}, {...cartas[j]}] = [cartas[j], cartas[i]]
     }
     return cartas
   }
@@ -21,11 +21,7 @@ const barajarCartas = (cartas : Carta[]): Carta[] => {
     Una carta se puede voltear si no está encontrada y no está ya volteada, o no hay dos cartas ya volteadas
   */
   export const sePuedeVoltearLaCarta = (tablero: Tablero, indice: number): boolean => {
-    if(tablero.estadoPartida != "DosCartasLevantadas" && tablero.cartas[indice].encontrada === false && tablero.cartas[indice].estaVuelta === false) {
-      return true
-    } else {
-      return false
-    }
+    return !tablero.cartas[indice].encontrada && !tablero.cartas[indice].estaVuelta
   }
   
   /*
@@ -46,30 +42,34 @@ const barajarCartas = (cartas : Carta[]): Carta[] => {
  let cartasEncontradas = 0
 
   export const parejaEncontrada = (tablero:Tablero, indiceA: number, indiceB: number) : void => {
-      tablero.cartas[indiceA].encontrada = true
-      tablero.cartas[indiceB].encontrada = true
-      cartasEncontradas++
+      tablero.cartas[indiceA].encontrada = true;
+      tablero.cartas[indiceA].estaVuelta = true;
+      tablero.cartas[indiceB].encontrada = true;
+      tablero.cartas[indiceB].estaVuelta = true;
+      tablero.indiceCartaVolteadaA = undefined;
+      tablero.indiceCartaVolteadaB = undefined;
+      tablero.estadoPartida = "CeroCartasLevantadas";
+      cartasEncontradas++;
   }
   /*
     Aquí asumimos que no son pareja y las volvemos a poner boca abajo
   */
-  export const parejaNoEncontrada = (tablero:Tablero) : void => {
-    tablero.cartas = tablero.cartas.map((cartas :Carta) => ({
-      ...cartas,
-      encontrada: false,
-      estaVuelta: false
-    }))
-    cartasEncontradas = 0
-    tablero.indiceCartaVolteadaA = undefined
-    tablero.indiceCartaVolteadaB = undefined
-    tablero.estadoPartida = "CeroCartasLevantadas"
+  export const parejaNoEncontrada = (tablero:Tablero, indiceA: number, indiceB: number) : void => {
+    tablero.cartas[indiceA].encontrada = false;
+    tablero.cartas[indiceA].estaVuelta = false;
+    tablero.cartas[indiceB].encontrada = false;
+    tablero.cartas[indiceB].estaVuelta = false;
+    cartasEncontradas = 0;
+    tablero.indiceCartaVolteadaA = undefined;
+    tablero.indiceCartaVolteadaB = undefined;
+    tablero.estadoPartida = "CeroCartasLevantadas";
   }
   
   export const comprobarSiEsPartidaCompleta = (tablero: Tablero) => {
     if(esPartidaCompleta() === true) {
-      tablero.estadoPartida = "PartidaCompleta"
+      tablero.estadoPartida = "PartidaCompleta";
     } else {
-      tablero.estadoPartida = "CeroCartasLevantadas"
+      tablero.estadoPartida = "CeroCartasLevantadas";
     }
   }
 
@@ -89,11 +89,8 @@ const barajarCartas = (cartas : Carta[]): Carta[] => {
   */
   
 const iniciaPartida = (tablero:Tablero): void => {
-    tablero = {
-      ...tablero,
-      cartas: cartasBarajadas,
-      estadoPartida: "CeroCartasLevantadas"
-    }
+    tablero.cartas = cartasBarajadas
+    tablero.estadoPartida = "CeroCartasLevantadas"
   }
 
 export const ejecutarEnBotonIniciarPartida = () => {

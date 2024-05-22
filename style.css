@@ -53,7 +53,4 @@ body {
     cursor: pointer;
 }
 
-.bloqueCartas.girado .bloqueCartas {
-    transform: rotateY(180deg);
-}
 
